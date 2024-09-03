@@ -19,7 +19,7 @@ function SideMenu() {
             <span className="text-sm font-medium"> Dashboard </span>
           </Link>
 
-              <Link to="/inventory">
+              <Link to="/stocks">
           <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                 <div className="flex items-center gap-2">
@@ -27,7 +27,7 @@ function SideMenu() {
                     alt="inventory-icon"
                     src="./inventory-icon.png"
                   />
-                  <span className="text-sm font-medium"> Inventory </span>
+                  <span className="text-sm font-medium"> Stocks </span>
                 </div>
             </summary>
           </details>

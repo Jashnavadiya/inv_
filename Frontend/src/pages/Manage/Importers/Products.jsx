@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Products = () => {
+const InfoProducts = () => {
   const [products, setProducts] = useState([
     { name: "Product 1", code: 'A1122334455', price: '$20', category: 'Electronics' },
     { name: "Product 2", code: 'B11223344556', price: '$25', category: 'Books' },
@@ -190,7 +190,7 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default InfoProducts;
 
 // import React, { useState, useEffect } from 'react';
 
