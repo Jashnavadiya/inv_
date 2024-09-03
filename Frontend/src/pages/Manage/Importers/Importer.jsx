@@ -3,12 +3,8 @@ import TagsInput from '../../../components/TagsInput';
 
 const Importer = () => {
     const [supplier, setSupplier] = useState([
-        { name: "saputara", contact: '1122334455', email: 'saputara123@gmail.com' },
-        { name: "saputara1", contact: '11223344556', email: 'saputara123@gmail.com' },
-        { name: "saputara2", contact: '11223344557', email: 'saputara122233@gmail.com' },
-        { name: "saputara3", contact: '11223344558', email: 'saputara123@gmail.com' },
-        { name: "saputara4", contact: '11223344558', email: 'saputara123@gmail.com' },
-        { name: "saputara5", contact: '11223344559', email: 'saputara123@gmail.com' }
+        // { name: "saputara", contact: '1122334455', email: 'saputara123@gmail.com' },
+        // { name: "saputara1", contact: '11223344556', email: 'saputara123@gmail.com' },
     ]);
 
     const [t1, setT1] = useState([]);
@@ -51,7 +47,7 @@ const Importer = () => {
 
         // Add the new supplier to the state
         setSupplier([...supplier, formData]);
-
+        localStorage.setItem('supplier', JSON.stringify([...supplier, formData])); 
         // Clear the form
         setFormData({
             name: '',
@@ -66,8 +62,13 @@ const Importer = () => {
     };
 
     useEffect(()=>{
-        setfilterdData(supplier)
+        if(supplier.length > 0){
+            setfilterdData(supplier)
+        }
     },[supplier])
+    useEffect(()=>{
+        setSupplier(JSON.parse(localStorage.getItem('supplier'))||[]);
+    },[])
     return (
         <>
          <div className="col-span-12 lg:col-span-10  flex justify-center">
@@ -106,6 +107,8 @@ const Importer = () => {
                         <span>Email</span>
                     </div>
                     <hr />
+                    {console.log(filterdData)
+}
                     {filterdData && filterdData.map((ele, i) => (
                         <div key={i} className='grid grid-cols-5 my-3'>
                             <span>{ele.name}</span>

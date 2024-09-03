@@ -58,14 +58,19 @@ const Ingre = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setIngredients([...ingredients, formData]);
+        localStorage.setItem('ingredients', JSON.stringify([...ingredients, formData]));
         setFormData({ name: '', quantity: '', supplier: '' });
         handleCloseModal();
     };
 
     useEffect(() => {
         setfilterdData(ingredients);
+       
     }, [ingredients]);
 
+  useEffect(()=>{
+    setIngredients(JSON.parse(localStorage.getItem('ingredients'))||[]);
+  },[])
     return (
         <>
          <div className="col-span-12 lg:col-span-10  flex justify-center">

@@ -3,70 +3,44 @@ import AddSale from "../components/AddSale";
 import AuthContext from "../AuthContext";
 
 function Sales() {
-  const [showSaleModal, setShowSaleModal] = useState(false);
-  const [sales, setAllSalesData] = useState([]);
-  const [products, setAllProducts] = useState([]);
-  const [stores, setAllStores] = useState([]);
-  const [updatePage, setUpdatePage] = useState(true);
+  const [showSaleModal, setSaleModal] = useState(false);
+  const [sales, setSales] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [search, setSearch] = useState('');
 
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    fetchSalesData();
-    fetchProductsData();
-    fetchStoresData();
-  }, [updatePage]);
+    const savedSales = JSON.parse(localStorage.getItem("sales")) || [];
+    setSales(savedSales);
+    setFilteredData(savedSales);
+  }, []);
 
-  // Fetching Data of All Sales
-  const fetchSalesData = () => {
-    fetch(`http://localhost:4000/api/sales/get/${authContext.user}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setAllSalesData(data);
-      })
-      .catch((err) => console.log(err));
+  useEffect(() => {
+    const lowercasedSearch = search.toLowerCase();
+    const filtered = sales.filter(sale =>
+      sale.name.toLowerCase().includes(lowercasedSearch) ||
+      sale.storename.toLowerCase().includes(lowercasedSearch) ||
+      sale.stockSold.toString().includes(lowercasedSearch) ||
+      sale.totalSaleAmount.toString().includes(lowercasedSearch)
+    );
+    setFilteredData(filtered);
+  }, [search, sales]);
+
+  const handleOpenSalePopup = () => {
+    setSaleModal(true);
   };
 
-  // Fetching Data of All Products
-  const fetchProductsData = () => {
-    fetch(`http://localhost:4000/api/product/get/${authContext.user}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setAllProducts(data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  // Fetching Data of All Stores
-  const fetchStoresData = () => {
-    fetch(`http://localhost:4000/api/store/get/${authContext.user}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setAllStores(data);
-      });
-  };
-
-  // Modal for Sale Add
-  const addSaleModalSetting = () => {
-    setShowSaleModal(!showSaleModal);
-  };
-
-  // Handle Page Update
-  const handlePageUpdate = () => {
-    setUpdatePage(!updatePage);
+  const handleCloseSalePopup = () => {
+    setSaleModal(false);
+    setSales(JSON.parse(localStorage.getItem('sales')));
   };
 
   return (
     <div className="col-span-12 lg:col-span-10  flex justify-center">
       <div className=" flex flex-col gap-5 w-11/12">
-        {showSaleModal && (
-          <AddSale
-            addSaleModalSetting={addSaleModalSetting}
-            products={products}
-            stores={stores}
-            handlePageUpdate={handlePageUpdate}
-            authContext={authContext}
-          />
+      {showSaleModal && (
+          <AddSale isOpen={showSaleModal} onClose={handleCloseSalePopup} />
         )}
         {/* Table  */}
         <div className="overflow-x-auto rounded-lg border bg-white border-gray-200 ">
@@ -77,7 +51,7 @@ function Sales() {
             <div className="flex gap-4">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 text-xs  rounded"
-                onClick={addSaleModalSetting}
+                onClick={handleOpenSalePopup}
               >
                 {/* <Link to="/inventory/add-product">Add Product</Link> */}
                 Add Sales
@@ -106,23 +80,24 @@ function Sales() {
             </thead>
 
             <tbody className="divide-y divide-gray-200">
+            
               {sales.map((element, index) => {
                 return (
                   <tr key={element._id}>
                     <td className="whitespace-nowrap px-4 py-2  text-gray-900">
-                      {element.ProductID?.name}
+                      {element.name}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.StoreID?.name}
+                      {element.storename}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.StockSold}
+                      {element.stockSold}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.SaleDate}
+                      {element.saleDate}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      ${element.TotalSaleAmount}
+                      ${element.totalSaleAmount}
                     </td>
                   </tr>
                 );

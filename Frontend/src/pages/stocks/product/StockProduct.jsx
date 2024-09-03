@@ -1,58 +1,73 @@
-import React, { useContext, useEffect, useState } from 'react';
-import AuthContext from "../../../AuthContext"; 
+import React, { useState, useContext, useEffect } from "react";
+import AuthContext from "../../../AuthContext";
 
 const StockProduct = () => {
   const [products, setAllProducts] = useState([]);
-  const [stores, setAllStores] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const authContext = useContext(AuthContext);
 
+ 
+
   useEffect(() => {
-    fetchProductsData();
-    fetchSalesData();
-  }, []);
-
-  // Fetching Data of All Products
-  const fetchProductsData = () => {
-    fetch(`http://localhost:4000/api/product/get/${authContext.user}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setAllProducts(data);
-        setFilteredData(data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  // Fetching all stores data
-  const fetchSalesData = () => {
-    fetch(`http://localhost:4000/api/store/get/${authContext.user}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setAllStores(data);
-      });
-  };
-
-  // Handle search
+    if (products.length > 0) {
+      updateStockQuantities();
+    }
+  }, [products.length]); // Dependency array includes only products.length
+useEffect(()=>{
+  const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
+    setAllProducts(storedProducts);
+},[])
   useEffect(() => {
     handleSearching();
   }, [search]);
+  useEffect(() => {
+    setFilteredData(products)
+    handleSearching()
+  }, [products]);
 
-  const handleSearching = () => {
+  const updateStockQuantities = () => {
+    const purchaseData = JSON.parse(localStorage.getItem("purchase")) || [];
+
+    const purchaseMap = purchaseData.reduce((acc, purchase) => {
+      if (acc[purchase.name]) {
+        acc[purchase.name] += parseInt(purchase.quantityPurchased, 10);
+      } else {
+        acc[purchase.name] = parseInt(purchase.quantityPurchased, 10);
+      }
+      return acc;
+    }, {});
+
+    const updatedProducts = products.map((product) => {
+      if (purchaseMap[product.name]) {
+        return {
+          ...product,
+          stock: (product.stock || 0) + purchaseMap[product.name],
+        };
+      }
+      return product;
+    });
+    console.log(updatedProducts);
+    
+    setAllProducts(updatedProducts); // This updates the state once with the final values
+    setFilteredData(updatedProducts); // Ensure filteredData is also updated
+  };
+
+   const handleSearching = () => {
     const lowercasedSearch = search.toLowerCase();
 
     if (products.length > 0) {
       const highlightedData = products.map((item) => {
-        const nameHighlighted = item.name.replace(
+        const nameHighlighted = item.name?.replace(
           new RegExp(`(${lowercasedSearch})`, 'gi'),
           (match) => `<span class="bg-blue-200">${match}</span>`
         );
-        const manufacturerHighlighted = item.manufacturer.replace(
+        const manufacturerHighlighted = item.manufacturer?.replace(
           new RegExp(`(${lowercasedSearch})`, 'gi'),
           (match) => `<span class="bg-blue-200">${match}</span>`
         );
-        const descriptionHighlighted = item.description.replace(
+        const descriptionHighlighted = item.description?.replace(
           new RegExp(`(${lowercasedSearch})`, 'gi'),
           (match) => `<span class="bg-blue-200">${match}</span>`
         );
@@ -76,96 +91,15 @@ const StockProduct = () => {
     }
   };
 
-  useEffect(() => {
-    setFilteredData(products)
-    handleSearching();
-  }, [products]);
+
+
   return (
-    <div className="col-span-12 lg:col-span-10  flex justify-center">
+    <div className="col-span-12 lg:col-span-10 flex justify-center">
       <div className="flex flex-col gap-5 w-11/12">
         <div className="bg-white rounded p-3">
           <span className="font-semibold px-4">Overall Inventory</span>
           <div className="flex flex-col md:flex-row justify-center items-center">
-            <div className="flex flex-col p-10 w-full md:w-3/12">
-              <span className="font-semibold text-blue-600 text-base">
-                Total Products
-              </span>
-              <span className="font-semibold text-gray-600 text-base">
-                {products.length}
-              </span>
-              <span className="font-thin text-gray-400 text-xs">
-                Last 7 days
-              </span>
-            </div>
-            <div className="flex flex-col gap-3 p-10 w-full md:w-3/12 sm:border-y-2 md:border-x-2 md:border-y-0">
-              <span className="font-semibold text-yellow-600 text-base">
-                Stores
-              </span>
-              <div className="flex gap-8">
-                <div className="flex flex-col">
-                  <span className="font-semibold text-gray-600 text-base">
-                    {stores.length}
-                  </span>
-                  <span className="font-thin text-gray-400 text-xs">
-                    Last 7 days
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-gray-600 text-base">
-                    $2000
-                  </span>
-                  <span className="font-thin text-gray-400 text-xs">
-                    Revenue
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3 p-10 w-full md:w-3/12 sm:border-y-2 md:border-x-2 md:border-y-0">
-              <span className="font-semibold text-purple-600 text-base">
-                Top Selling
-              </span>
-              <div className="flex gap-8">
-                <div className="flex flex-col">
-                  <span className="font-semibold text-gray-600 text-base">
-                    5
-                  </span>
-                  <span className="font-thin text-gray-400 text-xs">
-                    Last 7 days
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-gray-600 text-base">
-                    $1500
-                  </span>
-                  <span className="font-thin text-gray-400 text-xs">
-                    Cost
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3 p-10 w-full md:w-3/12 border-y-2 md:border-x-2 md:border-y-0">
-              <span className="font-semibold text-red-600 text-base">
-                Low Stocks
-              </span>
-              <div className="flex gap-8">
-                <div className="flex flex-col">
-                  <span className="font-semibold text-gray-600 text-base">
-                    12
-                  </span>
-                  <span className="font-thin text-gray-400 text-xs">
-                    Ordered
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-gray-600 text-base">
-                    2
-                  </span>
-                  <span className="font-thin text-gray-400 text-xs">
-                    Not in Stock
-                  </span>
-                </div>
-              </div>
-            </div>
+            {/* Your other elements here */}
           </div>
         </div>
 
@@ -194,7 +128,7 @@ const StockProduct = () => {
           <div className="col-span-12">
             <div className="grid grid-cols-6 pb-3 text-sm">
               <span>Name</span>
-              <span>Manufacture</span>
+              <span>Manufacturer</span>
               <span>Stocks</span>
               <span>Description</span>
               <span>Availability</span>
@@ -202,10 +136,20 @@ const StockProduct = () => {
             <hr />
             {filteredData.map((ele, i) => (
               <div key={i} className="grid grid-cols-6 my-3">
-                <span dangerouslySetInnerHTML={{ __html: ele.nameHighlighted }}></span>
-                <span dangerouslySetInnerHTML={{ __html: ele.manufacturerHighlighted }}></span>
-                <span>{ele.stock}</span>
-                <span dangerouslySetInnerHTML={{ __html: ele.descriptionHighlighted }}></span>
+                <span
+                  dangerouslySetInnerHTML={{ __html: ele.nameHighlighted }}
+                ></span>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: ele.manufacturerHighlighted,
+                  }}
+                ></span>
+                <span>{ele.stock?ele.stock:0}</span>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: ele.descriptionHighlighted,
+                  }}
+                ></span>
                 <span>{ele.stock > 0 ? "In Stock" : "Not in Stock"}</span>
               </div>
             ))}
@@ -217,6 +161,8 @@ const StockProduct = () => {
 };
 
 export default StockProduct;
+
+
 
 
 
