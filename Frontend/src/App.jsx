@@ -1,5 +1,5 @@
 import React from "react";
-import Login from "./pages/Login";
+import Login from "./pages/Login.jsx";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import "./index.css";
@@ -17,6 +17,7 @@ import Importer from "./pages/Manage/Importers/Importer";
 import Client from "./pages/Manage/Importers/client";
 import Ingre from "./pages/Manage/Importers/Ingre";
 import Products from "./pages/Manage/Importers/Products";
+import ProtectedWrapper from "./ProtectedWrapper";
 
 const App = () => {
   const [user, setUser] = useState("");
@@ -64,13 +65,19 @@ const App = () => {
   return (
     <AuthContext.Provider value={value}>
       <BrowserRouter>
+      
+
+     
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
             path="/"
             element={
-                <Layout />
+              <ProtectedWrapper>
+                
+              <Layout />
+              </ProtectedWrapper>
             }
           >
             <Route index element={<Dashboard />} />
@@ -81,7 +88,12 @@ const App = () => {
             
           </Route>
 
-          <Route path="/info/" element={<MainManage />} >
+          <Route path="/info/" element={
+            <ProtectedWrapper>
+
+            <MainManage />
+            </ProtectedWrapper>
+        } >
             <Route path="/info/importers" element={<Importer/>}/>
             <Route path="/info/clients" element={<Client/>}/>
             <Route path="/info/ingredients" element={<Ingre/>}/>
@@ -89,7 +101,7 @@ const App = () => {
           </Route>
           <Route path="*" element={<NoPageFound />} />
         </Routes>
-        
+    
       </BrowserRouter>
     </AuthContext.Provider>
   );
