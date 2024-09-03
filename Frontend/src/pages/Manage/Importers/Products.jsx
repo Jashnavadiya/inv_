@@ -80,9 +80,11 @@ const InfoProducts = () => {
 
   return (
     <>
+     <div className="col-span-12 lg:col-span-10  flex justify-center">
+     <div className="flex flex-col gap-5 w-11/12">
       <div className='grid grid-cols-1 col-span-12 lg:col-span-10 gap-6 md:grid-cols-3 lg:grid-cols-4 p-4 bg-white rounded-lg'>
-        <h2 className='col-span-12 flex justify-between align-baseline'>
-          <span><i className="fa-solid fa-box"></i> Products</span>
+        <h2 className='col-span-12 flex justify-between align-middle'>
+          <span className='my-auto'><i className="fa-solid fa-box"></i> Products</span>
           <div className="relative">
             <form action="" onSubmit={(e) => e.preventDefault()}>
               <input
@@ -118,6 +120,8 @@ const InfoProducts = () => {
           ))}
 
         </div>
+      </div>
+      </div>
       </div>
 
       {/* Modal */}

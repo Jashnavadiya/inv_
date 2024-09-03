@@ -70,9 +70,11 @@ const Importer = () => {
     },[supplier])
     return (
         <>
-            <div className='grid grid-cols-1 col-span-12 lg:col-span-10 gap-6 md:grid-cols-3 lg:grid-cols-4 p-4 bg-white rounded-lg'>
+         <div className="col-span-12 lg:col-span-10  flex justify-center">
+         <div className="flex flex-col gap-5 w-11/12">
+            <div className='grid grid-cols-1  col-span-12 lg:col-span-10 gap-6 md:grid-cols-3 lg:grid-cols-4 p-4 bg-white rounded-lg'>
                 <h2 className='col-span-12 flex justify-between align-baseline'>
-                    <span><i className="fa-solid fa-user"></i> Suppliers</span>
+                    <span className='my-auto'><i className="fa-solid fa-user"></i> Suppliers</span>
                     <div className="relative">
                         <form action="" onSubmit={(e) => e.preventDefault()}>
                             <input
@@ -118,7 +120,8 @@ const Importer = () => {
                     <TagsInput suggestions={suggestions} tags={t1} setTags={setT1} />
                 </div>
             </div>
-
+</div>
+</div>
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
