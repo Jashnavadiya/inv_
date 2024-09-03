@@ -1,9 +1,11 @@
+
 import React from 'react'
 import { Link } from "react-router-dom";
 const localStorageData = JSON.parse(localStorage.getItem("user"))||[];
 const ManageSidemenu = () => {
   return (
-    <div className="h-full flex-col justify-between  bg-white hidden lg:flex ">
+    <div>
+         <div className="h-full flex-col justify-between  bg-white hidden lg:flex ">
       <div className="px-4 py-6">
 
         <nav aria-label="Main Nav" className="mt-6 flex flex-col space-y-1">
@@ -23,7 +25,7 @@ const ManageSidemenu = () => {
                     alt="inventory-icon"
                     src="/importers.png"
                   />
-                  <span className="text-sm font-medium"> sadbasbdkjkndklksd </span>
+                  <span className="text-sm font-medium"> Importers </span>
                 </div>
             </summary>
           </details>
@@ -81,6 +83,7 @@ const ManageSidemenu = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

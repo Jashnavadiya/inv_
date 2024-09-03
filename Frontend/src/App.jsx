@@ -67,7 +67,7 @@ const App = () => {
       <BrowserRouter>
       
 
-     
+{/* main routing  */}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -88,6 +88,11 @@ const App = () => {
             
           </Route>
 
+
+
+{/* Information routing */}
+
+
           <Route path="/info/" element={
             <ProtectedWrapper>
 
@@ -100,8 +105,24 @@ const App = () => {
             <Route path="/info/products" element={<Products/>}/>
           </Route>
           <Route path="*" element={<NoPageFound />} />
-        </Routes>
+   
+
+{/* stocks routing */}
     
+<Route path="/stocks/" element={
+            <ProtectedWrapper>
+
+            <MainManage />
+            </ProtectedWrapper>
+        } >
+            <Route path="/stocks/product" element={<Importer/>}/>
+            <Route path="/stocks/ingredients" element={<Ingre/>}/>
+            <Route path="/stocks/ingre" element={<Client/>}/>
+            <Route path="/stocks/products" element={<Products/>}/>
+          </Route>
+          <Route path="*" element={<NoPageFound />} />
+        </Routes>
+
       </BrowserRouter>
     </AuthContext.Provider>
   );
