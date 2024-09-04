@@ -12,7 +12,7 @@ app.get("/get/:userId", product.getAllProducts);
 app.get("/delete/:id", product.deleteSelectedProduct);
 
 // Update Selected Product
-app.post("/update", product.updateSelectedProduct);
+app.put("/update/:id", product.updateSelectedProduct);
 
 // Search Product
 app.get("/search", product.searchProduct);

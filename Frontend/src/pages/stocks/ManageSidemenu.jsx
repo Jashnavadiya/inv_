@@ -17,7 +17,7 @@ const ManageSidemenu = () => {
             <span className="text-sm font-medium">Back To Dashboard</span>
           </Link>
 
-              <Link to="/info/importers">
+              <Link to="/stocks/product">
           <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                 <div className="flex items-center gap-2">
@@ -25,38 +25,38 @@ const ManageSidemenu = () => {
                     alt="inventory-icon"
                     src="/importers.png"
                   />
-                  <span className="text-sm font-medium"> Importers </span>
+                  <span className="text-sm font-medium"> Products </span>
                 </div>
             </summary>
           </details>
               </Link>
-
-          <Link
-            to="/info/clients"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          >
-            <img
-              alt="purchase-icon"
-              src="/supplier-icon.png"
-            />
-            <span className="text-sm font-medium">Clients</span>
-          </Link>
-          <Link
-            to="/info/ingredients"
+              <Link
+            to="/stocks/ingredients"
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           >
             <img alt="sale-icon" src="/ingredients.png" />
             <span className="text-sm font-medium"> ingredients</span>
           </Link>
+          <Link
+            to="/stocks/stockalert"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          >
+            <img
+              alt="purchase-icon"
+              src="/danger-icon.png"
+            />
+            <span className="text-sm font-medium">Low In Stocks</span>
+          </Link>
+          
 
-              <Link to="/info/products">
+              <Link to="/stocks/calculator">
           <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                 <div className="flex items-center gap-2">
                   <img
-                    src="/order-icon.png"
+                    src="/calculator.png"
                   />
-                  <span className="text-sm font-medium"> products </span>
+                  <span className="text-sm font-medium"> calculator </span>
                 </div>
             </summary>
           </details>

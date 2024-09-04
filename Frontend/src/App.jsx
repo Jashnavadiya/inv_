@@ -16,8 +16,13 @@ import MainManage from "./pages/Manage/MainManage";
 import Importer from "./pages/Manage/Importers/Importer";
 import Client from "./pages/Manage/Importers/client";
 import Ingre from "./pages/Manage/Importers/Ingre";
-import Products from "./pages/Manage/Importers/Products";
+import InfoProducts from "./pages/Manage/Importers/Products";
 import ProtectedWrapper from "./ProtectedWrapper";
+import StockProduct from "./pages/stocks/product/StockProduct.jsx";
+import MainStock from "./pages/stocks/MainStock.jsx";
+import Ingredients from "./pages/stocks/Ingre/Ingredients.jsx";
+import LowStock from "./pages/stocks/LowStock/LowStock.jsx";
+import Calculator from "./pages/stocks/calculator/calculator.jsx";
 
 const App = () => {
   const [user, setUser] = useState("");
@@ -102,7 +107,7 @@ const App = () => {
             <Route path="/info/importers" element={<Importer/>}/>
             <Route path="/info/clients" element={<Client/>}/>
             <Route path="/info/ingredients" element={<Ingre/>}/>
-            <Route path="/info/products" element={<Products/>}/>
+            <Route path="/info/products" element={<InfoProducts/>}/>
           </Route>
           <Route path="*" element={<NoPageFound />} />
    
@@ -112,13 +117,13 @@ const App = () => {
 <Route path="/stocks/" element={
             <ProtectedWrapper>
 
-            <MainManage />
+            <MainStock />
             </ProtectedWrapper>
         } >
-            <Route path="/stocks/product" element={<Importer/>}/>
-            <Route path="/stocks/ingredients" element={<Ingre/>}/>
-            <Route path="/stocks/ingre" element={<Client/>}/>
-            <Route path="/stocks/products" element={<Products/>}/>
+            <Route path="/stocks/product" element={<StockProduct/>}/>
+            <Route path="/stocks/ingredients" element={<Ingredients/>}/>
+            <Route path="/stocks/stockalert" element={<LowStock/>}/>
+            <Route path="/stocks/calculator" element={<Calculator/>}/>
           </Route>
           <Route path="*" element={<NoPageFound />} />
         </Routes>

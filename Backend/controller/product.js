@@ -48,9 +48,10 @@ const deleteSelectedProduct = async (req, res) => {
 
 // Update Selected Product
 const updateSelectedProduct = async (req, res) => {
+  console.log(req.params.id);
   try {
     const updatedResult = await Product.findByIdAndUpdate(
-      { _id: req.body.productID },
+      req.params.id,
       {
         name: req.body.name,
         manufacturer: req.body.manufacturer,
@@ -58,13 +59,19 @@ const updateSelectedProduct = async (req, res) => {
       },
       { new: true }
     );
-    console.log(updatedResult);
+
+    if (!updatedResult) {
+      return res.status(404).send("Product not found");
+    }
+
+    console.log("Updated Product:", updatedResult);
     res.json(updatedResult);
   } catch (error) {
-    console.log(error);
-    res.status(402).send("Error");
+    console.error("Error updating product:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
+
 
 // Search Products
 const searchProduct = async (req, res) => {

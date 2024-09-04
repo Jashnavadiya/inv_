@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-
-const Products = () => {
+import React, { useState, useEffect, useContext } from 'react';
+import AddProduct from "../../../components/AddProduct";
+import UpdateProduct from "../../../components/UpdateProduct";
+import AuthContext from "../../../AuthContext";
+const InfoProducts = () => {
   const [products, setProducts] = useState([
-    { name: "Product 1", code: 'A1122334455', price: '$20', category: 'Electronics' },
-    { name: "Product 2", code: 'B11223344556', price: '$25', category: 'Books' },
-    { name: "Product 3", code: 'C11223344557', price: '$30', category: 'Clothing' },
-    { name: "Product 4", code: 'D11223344558', price: '$20', category: 'Toys' },
-    { name: "Product 5", code: 'E11223344559', price: '$15', category: 'Kitchen' }
+    // { name: "Product 1", code: 'A1122334455', price: '$20', category: 'Electronics' },
   ]);
 
   const [filteredData, setFilteredData] = useState(products);
@@ -22,45 +20,96 @@ const Products = () => {
   const handleSearching = () => {
     const lowercasedSearch = search.toLowerCase();
 
-    const highlightedData = products.map((item) => {
-      const nameHighlighted = item.name.replace(
-        new RegExp(`(${lowercasedSearch})`, 'gi'),
-        (match) => `<span class="bg-blue-200">${match}</span>`
-      );
-      const codeHighlighted = item.code.replace(
-        new RegExp(`(${lowercasedSearch})`, 'gi'),
-        (match) => `<span class="bg-blue-200">${match}</span>`
-      );
-      const priceHighlighted = item.price.replace(
-        new RegExp(`(${lowercasedSearch})`, 'gi'),
-        (match) => `<span class="bg-blue-200">${match}</span>`
+    if (products.length > 0) {
+      const highlightedData = products.map((item) => {
+        const nameHighlighted = item.name?.replace(
+          new RegExp(`(${lowercasedSearch})`, 'gi'),
+          (match) => `<span class="bg-blue-200">${match}</span>`
+        );
+        const manufacturerHighlighted = item.manufacturer?.replace(
+          new RegExp(`(${lowercasedSearch})`, 'gi'),
+          (match) => `<span class="bg-blue-200">${match}</span>`
+        );
+        const descriptionHighlighted = item.description?.replace(
+          new RegExp(`(${lowercasedSearch})`, 'gi'),
+          (match) => `<span class="bg-blue-200">${match}</span>`
+        );
+
+        return {
+          ...item,
+          nameHighlighted,
+          manufacturerHighlighted,
+          descriptionHighlighted,
+        };
+      });
+
+      const filtered = highlightedData.filter(
+        (item) =>
+          item.name.toLowerCase().includes(lowercasedSearch) ||
+          item.manufacturer.toLowerCase().includes(lowercasedSearch) ||
+          item.description.toLowerCase().includes(lowercasedSearch)
       );
 
-      return {
-        ...item,
-        nameHighlighted,
-        codeHighlighted,
-        priceHighlighted,
-      };
-    });
+      setFilteredData(filtered);
+    }
+  };
 
-    const filtered = highlightedData.filter(
-      (item) =>
-        item.name.toLowerCase().includes(lowercasedSearch) ||
-        item.code.toLowerCase().includes(lowercasedSearch) ||
-        item.price.toLowerCase().includes(lowercasedSearch)
-    );
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateProduct, setUpdateProduct] = useState([]);
 
-    setFilteredData(filtered);
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true);
+    console.log("hi",isPopupOpen);
+    
+  };
+
+  const handleClosePopup = () => {
+    setProducts(JSON.parse(localStorage.getItem('products')||[])) 
+    // fetchProductsData();
+    // fetchSalesData();
+    setIsPopupOpen(false);
+  };
+
+  const [updatePage, setUpdatePage] = useState(true);
+
+
+  const authContext = useContext(AuthContext);
+ 
+
+
+  // Fetching Data of All Products
+  const fetchProductsData = () => {
+    fetch(`http://localhost:4000/api/product/get/${authContext.user}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((err) => console.log(err));
+  };
+  // Fetching all stores data
+  // const fetchSalesData = () => {
+  //   fetch(`http://localhost:4000/api/store/get/${authContext.user}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setAllStores(data);
+  //     });
+  // };
+  // Delete item
+  const deleteItem = (id) => {
+    fetch(`http://localhost:4000/api/product/delete/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setUpdatePage(!updatePage);
+      });
   };
 
   useEffect(() => {
     handleSearching();
   }, [search]);
-
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -68,55 +117,114 @@ const Products = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("hi");
     setProducts([...products, formData]);
-    setFormData({ name: '', price: '', category: '' ,code: '' });
+    
+    localStorage.setItem('products', JSON.stringify([...products, formData]));
+    setFormData({ name: '', price: '', category: '', code: '' });
     handleCloseModal();
   };
 
   useEffect(() => {
-    setFilteredData(products);
+    // setFilteredData(products);
     handleSearching()
   }, [products]);
+  const updatedatarealtime=()=>{
+    // fetchProductsData();
+    // fetchSalesData();
+  }
+  useEffect(() => {
+    try {
+      const productsData = localStorage.getItem('products');
+      const parsedProducts = productsData ? JSON.parse(productsData) : [];
+      setProducts(parsedProducts);
+      console.log(parsedProducts);
+    } catch (error) {
+      console.error('Error parsing JSON from localStorage:', error);
+      setProducts([]); // Set an empty array on error
+    }
+  }, []);
+  
+  const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleOpenUpdatePopup = (product) => {
+    setSelectedProduct(product);
+    setIsUpdatePopupOpen(true);
+  };
+
+  const handleCloseUpdatePopup = () => {
+    setIsUpdatePopupOpen(false);
+  };
 
   return (
     <>
-      <div className='grid grid-cols-1 col-span-12 lg:col-span-10 gap-6 md:grid-cols-3 lg:grid-cols-4 p-4 bg-white rounded-lg'>
-        <h2 className='col-span-12 flex justify-between align-baseline'>
-          <span><i className="fa-solid fa-box"></i> Products</span>
-          <div className="relative">
-            <form action="" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search products..."
-                className="border rounded-md pl-10 pr-5 py-2"
-              />
-            </form>
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-              <i className="fas fa-search"></i>
-            </span>
-          </div>
-          <span className='flex'>
-            <button onClick={handleOpenModal} className='bg-[#1570ef] text-white rounded-md px-3 py-2'>+ Add Product</button>
-          </span>
-        </h2>
-        <div className='col-span-12'>
-          <div className='grid grid-cols-5 pb-3'>
-            <span>Product's Name</span>
-            <span>Price</span>
-            <span>Category</span>
-          </div>
-          <hr />
-          {filteredData.map((product, i) => (
-            <div key={i} className='grid grid-cols-4 my-3'>
-              <span dangerouslySetInnerHTML={{ __html: product.nameHighlighted }}></span>
-              <span dangerouslySetInnerHTML={{ __html: product.codeHighlighted }}></span>
-              <span dangerouslySetInnerHTML={{ __html: product.priceHighlighted }}></span>
-              <span>{product.category}</span>
-            </div>
-          ))}
+  
+        <AddProduct isOpen={isPopupOpen} onClose={handleClosePopup} />
+ 
+        {selectedProduct && (
+        <UpdateProduct
+          isOpen={isUpdatePopupOpen}
+          onClose={handleCloseUpdatePopup}
+          updateProductData={selectedProduct}
+        />
+      )}
+      <div className="col-span-12 lg:col-span-10  flex justify-center">
+        <div className="flex flex-col gap-5 w-11/12">
+          <div className='grid grid-cols-1 col-span-12 lg:col-span-10 gap-6 md:grid-cols-3 lg:grid-cols-4 p-4 bg-white rounded-lg'>
+            <h2 className='col-span-12 flex justify-between align-middle'>
+              <span className='my-auto'><i className="fa-solid fa-box"></i> Products</span>
+              <div className="relative">
+                <form action="" onSubmit={(e) => e.preventDefault()}>
+                  <input
+                    type="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search products..."
+                    className="border rounded-md pl-10 pr-5 py-2"
+                  />
+                </form>
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  <i className="fas fa-search"></i>
+                </span>
+              </div>
+              <span className='flex'>
+                <button onClick={handleOpenPopup} className='bg-[#1570ef] text-white rounded-md px-3 py-2'>+ Add Product</button>
+              </span>
+            </h2>
+            <div className='col-span-12'>
+              <div className='grid grid-cols-5 pb-3'>
+                <span>Product's Name</span>
+                <span>Price</span>
+                <span>Category</span>
+              </div>
+              <hr />
+              {filteredData.map((ele, i) => (
+                <div key={i} className="grid grid-cols-6 my-3">
+                  <span dangerouslySetInnerHTML={{ __html: ele.nameHighlighted }}></span>
+                  <span dangerouslySetInnerHTML={{ __html: ele.manufacturerHighlighted }}></span>
+                  <span>{ele.stock}</span>
+                  <span dangerouslySetInnerHTML={{ __html: ele.descriptionHighlighted }}></span>
+                  <span>
+                    <span
+                      className="text-green-700 cursor-pointer"
+                      onClick={() => handleOpenUpdatePopup(ele)}
+                    >
+                      Edit{" "}
+                    </span>
+                    <span
+                      className="text-red-600 px-2 cursor-pointer"
+                      onClick={() => deleteItem(ele._id)}
+                    >
+                      Delete
+                    </span>
+                  </span>
+                </div>
+              ))}
+             
 
+            </div>
+          </div>
         </div>
       </div>
 
@@ -190,7 +298,7 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default InfoProducts;
 
 // import React, { useState, useEffect } from 'react';
 
