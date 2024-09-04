@@ -1,76 +1,62 @@
-import React from "react";
+
+import React from 'react'
 import { Link } from "react-router-dom";
-
-function SideMenu() {
-  const localStorageData = JSON.parse(localStorage.getItem("user"))||[];
-
+const localStorageData = JSON.parse(localStorage.getItem("user"))||[];
+const ManageSidemenu = () => {
   return (
-    <div className="h-full flex-col justify-between  bg-white hidden lg:flex ">
+    <div>
+         <div className="h-full flex-col justify-between  bg-white hidden lg:flex ">
       <div className="px-4 py-6">
+
         <nav aria-label="Main Nav" className="mt-6 flex flex-col space-y-1">
           <Link
             to="/"
             className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-700"
           >
-            <img
-              alt="dashboard-icon"
-              src="/dashboard-icon.png"
-            />
-            <span className="text-sm font-medium"> Dashboard </span>
+            <i className="fa-solid fa-arrow-left"></i>
+            <span className="text-sm font-medium">Back To Dashboard</span>
           </Link>
 
-              <Link to="/stocks">
+              <Link to="/stocks/product">
           <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                 <div className="flex items-center gap-2">
                   <img
                     alt="inventory-icon"
-                    src="./inventory-icon.png"
+                    src="/importers.png"
                   />
-                  <span className="text-sm font-medium"> Stocks </span>
+                  <span className="text-sm font-medium"> Products </span>
                 </div>
             </summary>
           </details>
               </Link>
-
+              <Link
+            to="/stocks/ingredients"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          >
+            <img alt="sale-icon" src="/ingredients.png" />
+            <span className="text-sm font-medium"> ingredients</span>
+          </Link>
           <Link
-            to="/purchase-details"
+            to="/stocks/stockalert"
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           >
             <img
               alt="purchase-icon"
-              src="/supplier-icon.png"
+              src="/danger-icon.png"
             />
-            <span className="text-sm font-medium"> Purchase Details</span>
+            <span className="text-sm font-medium">Low In Stocks</span>
           </Link>
-          <Link
-            to="/sales"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          >
-            <img alt="sale-icon" src="/supplier-icon.png" />
-            <span className="text-sm font-medium"> Sales</span>
-          </Link>
+          
 
-              <Link to="/manage-store">
+              <Link to="/stocks/calculator">
           <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
                 <div className="flex items-center gap-2">
                   <img
-                    src="/order-icon.png"
+                    src="/calculator.png"
                   />
-                  <span className="text-sm font-medium"> Manage Store </span>
-                </div>
-            </summary>
-          </details>
-              </Link>
-              <Link to="/info">
-          <details className="group [&_summary::-webkit-details-marker]:hidden">
-            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/order-icon.png"
-                  />
-                  <span className="text-sm font-medium"> Manage Info </span>
+                  <span className="text-sm font-medium"> calculator </span>
                 </div>
             </summary>
           </details>
@@ -98,7 +84,8 @@ function SideMenu() {
         </div>
       </div>
     </div>
-  );
+    </div>
+  )
 }
 
-export default SideMenu;
+export default ManageSidemenu

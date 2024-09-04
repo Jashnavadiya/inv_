@@ -23,7 +23,7 @@ const ManageSidemenu = () => {
                     alt="inventory-icon"
                     src="/importers.png"
                   />
-                  <span className="text-sm font-medium"> Importers </span>
+                  <span className="text-sm font-medium"> Suppliers </span>
                 </div>
             </summary>
           </details>
