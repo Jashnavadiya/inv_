@@ -23,6 +23,7 @@ import MainStock from "./pages/stocks/MainStock.jsx";
 import Ingredients from "./pages/stocks/Ingre/Ingredients.jsx";
 import LowStock from "./pages/stocks/LowStock/LowStock.jsx";
 import Calculator from "./pages/stocks/calculator/calculator.jsx";
+import YearSelection from "./pages/YearSelection.jsx";
 
 const App = () => {
   const [user, setUser] = useState("");
@@ -76,6 +77,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/yearselect" element={<YearSelection />} />
           <Route
             path="/"
             element={
