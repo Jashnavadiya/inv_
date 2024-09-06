@@ -11,7 +11,7 @@ const Product = require("./models/Product");
 
 const app = express();
 const PORT = 4000;
-main();
+
 app.use(express.json());
 app.use(cors());
 
@@ -91,5 +91,6 @@ app.get("/testget", async (req,res)=>{
 
 // Here we are listening to the server
 app.listen(PORT, () => {
+  main();
   console.log("I am live again");
 });

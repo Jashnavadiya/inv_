@@ -3,6 +3,8 @@ const uri = "mongodb+srv://sahilmegascale01:Asdf1234@cluster0.unu1o.mongodb.net/
 
 
 function main() {
+
+    
     mongoose.connect(uri).then(() => {
         console.log("Succesfull")
     
