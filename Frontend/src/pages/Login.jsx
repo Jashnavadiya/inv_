@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../AuthContext";
 
 function Login() {
+  const nav=useNavigate()
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -25,7 +26,7 @@ function Login() {
           alert("Successfully Login");
           localStorage.setItem("user", JSON.stringify(data));
           authContext.signin(data._id, () => {
-            navigate("/");
+            navigate("/yearselect");
           });
         })
         .catch((err) => {
@@ -49,6 +50,7 @@ function Login() {
       })
         .then((result) => {
           console.log("User login", result);
+          
         })
         .catch((error) => {
           console.log("Something went wrong ", error);

@@ -16,13 +16,14 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "apexcharts": "^3.37.2",
-<<<<<<< HEAD
-    "chart.js": "^4.4.4",
-=======
+
+    "apexcharts": "^3.53.0",
+
+    
+
+
     "chart.js": "^4.2.1",
     "json-server": "^1.0.0-beta.2",
->>>>>>> 32a95f510278fc0b41c488dc3ebf9eadc5820552
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
     "react-chartjs-2": "^5.2.0",
