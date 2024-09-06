@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const uri = "mongodb://localhost:27017/";
+const uri = "mongodb+srv://sahilmegascale01:Asdf1234@cluster0.unu1o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
 function main() {
